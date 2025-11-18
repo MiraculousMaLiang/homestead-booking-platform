@@ -1,0 +1,101 @@
+spring:
+  application:
+    name: homestead-booking-platform
+
+  # 数据源配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/homestead_booking?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+
+  # Redis配置
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      database: 0
+      timeout: 3000
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1
+          max-idle: 8
+          min-idle: 0
+
+  # 文件上传配置
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+
+  # Jackson配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+
+# MyBatis Plus配置
+mybatis-plus:
+  configuration:
+    # 日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 驼峰转下划线
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      # 主键类型
+      id-type: auto
+      # 逻辑删除字段
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  # mapper.xml文件位置
+  mapper-locations: classpath*:/mapper/**/*.xml
+  # 实体类扫描包
+  type-aliases-package: com.homestead.booking.entity
+
+# 服务器配置
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# 日志配置
+logging:
+  level:
+    com.homestead.booking: debug
+    com.homestead.booking.mapper: debug
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n"
+
+# 自定义配置
+homestead:
+  # JWT配置
+  jwt:
+    secret: homestead-booking-platform-secret-key-2025
+    expiration: 604800000 # 7天,单位毫秒
+    header: Authorization
+    prefix: Bearer
+
+  # 阿里云OSS配置
+  oss:
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    access-key-id: your-access-key-id
+    access-key-secret: your-access-key-secret
+    bucket-name: homestead-booking
+    base-url: https://homestead-booking.oss-cn-hangzhou.aliyuncs.com
+
+  # 阿里云短信配置
+  sms:
+    access-key-id: your-access-key-id
+    access-key-secret: your-access-key-secret
+    sign-name: 民宿预订平台
+    template-code: SMS_123456789
+
+  # 分页配置
+  page:
+    default-page-size: 10
+    max-page-size: 100
