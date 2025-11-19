@@ -24,7 +24,7 @@ public class FavoriteController {
                                     @PathVariable Long homesteadId) {
         Long userId = (Long) request.getAttribute("userId");
         // TODO: 实现收藏逻辑
-        return Result.success("收藏成功");
+        return Result.success();
     }
 
     /**
@@ -35,7 +35,7 @@ public class FavoriteController {
                                        @PathVariable Long homesteadId) {
         Long userId = (Long) request.getAttribute("userId");
         // TODO: 实现取消收藏逻辑
-        return Result.success("取消收藏成功");
+        return Result.success();
     }
 
 }

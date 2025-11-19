@@ -187,8 +187,8 @@ Content-Type: application/json
 
 响应:
 {
-  "code": 200,
-  "message": "操作成功",
+  "code": 1,
+  "msg": null,
   "data": {
     "token": "eyJhbGciOiJIUzI1NiJ9...",
     "user": {
@@ -267,8 +267,8 @@ Content-Type: application/json
 
 响应:
 {
-  "code": 200,
-  "message": "操作成功",
+  "code": 1,
+  "msg": null,
   "data": {
     "total": 100,
     "pageNum": 1,
@@ -402,8 +402,8 @@ homestead:
 所有接口统一响应格式:
 ```json
 {
-  "code": 200,
-  "message": "操作成功",
+  "code": 1,
+  "msg": null,
   "data": {},
   "timestamp": 1700000000000
 }

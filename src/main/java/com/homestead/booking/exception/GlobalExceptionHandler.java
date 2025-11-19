@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public Result<?> handleBusinessException(BusinessException e) {
         log.error("业务异常: {}", e.getMessage());
-        return Result.error(e.getCode(), e.getMessage());
+        return Result.error(e.getMessage());
     }
 
     /**
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining(", "));
         log.error("参数校验异常: {}", message);
-        return Result.error(ResultCode.PARAM_ERROR.getCode(), message);
+        return Result.error(message);
     }
 
     /**
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining(", "));
         log.error("参数绑定异常: {}", message);
-        return Result.error(ResultCode.PARAM_ERROR.getCode(), message);
+        return Result.error(message);
     }
 
     /**

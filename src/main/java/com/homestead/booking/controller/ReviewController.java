@@ -24,7 +24,7 @@ public class ReviewController {
                                      @PathVariable Long orderId) {
         Long userId = (Long) request.getAttribute("userId");
         // TODO: 实现评价提交逻辑
-        return Result.success("评价成功");
+        return Result.success();
     }
 
     /**

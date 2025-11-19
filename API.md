@@ -12,20 +12,18 @@
 ### 成功响应
 ```json
 {
-  "code": 200,
-  "message": "操作成功",
-  "data": {},
-  "timestamp": 1700000000000
+  "code": 1,
+  "msg": null,
+  "data": {}
 }
 ```
 
 ### 失败响应
 ```json
 {
-  "code": 500,
-  "message": "错误信息",
-  "data": null,
-  "timestamp": 1700000000000
+  "code": 0,
+  "msg": "错误信息",
+  "data": null
 }
 ```
 
@@ -33,23 +31,8 @@
 
 | 状态码 | 说明 |
 |-------|------|
-| 200 | 成功 |
-| 400 | 参数错误 |
-| 404 | 资源不存在 |
-| 500 | 服务器错误 |
-| 1001 | 用户不存在 |
-| 1002 | 用户已存在 |
-| 1003 | 用户名或密码错误 |
-| 1004 | 用户已被禁用 |
-| 1005 | 用户未登录 |
-| 1006 | 登录已过期 |
-| 1007 | 没有权限访问 |
-| 2001 | 验证码错误 |
-| 2002 | 验证码已过期 |
-| 2004 | 验证码发送过于频繁 |
-| 3001 | 房源不存在 |
-| 3002 | 房源不可预订 |
-| 4001 | 订单不存在 |
+| 1 | 成功 |
+| 0 | 失败 |
 
 ---
 
@@ -85,10 +68,9 @@
 **响应示例**:
 ```json
 {
-  "code": 200,
-  "message": "操作成功",
-  "data": null,
-  "timestamp": 1700000000000
+  "code": 1,
+  "msg": null,
+  "data": null
 }
 ```
 
@@ -119,8 +101,8 @@
 **响应示例**:
 ```json
 {
-  "code": 200,
-  "message": "操作成功",
+  "code": 1,
+  "msg": null,
   "data": {
     "token": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoidGVzdHVzZXIifQ...",
     "user": {
@@ -136,8 +118,7 @@
       "status": 1,
       "createTime": "2025-11-18 10:00:00"
     }
-  },
-  "timestamp": 1700000000000
+  }
 }
 ```
 
@@ -161,10 +142,10 @@ POST /user/sendVerifyCode?phone=13800138000
 **响应示例**:
 ```json
 {
-  "code": 200,
-  "message": "验证码发送成功",
+  "code": 1,
+  "msg": null,
   "data": null,
-  "timestamp": 1700000000000
+  
 }
 ```
 
@@ -184,8 +165,8 @@ Authorization: Bearer {token}
 **响应示例**:
 ```json
 {
-  "code": 200,
-  "message": "操作成功",
+  "code": 1,
+  "msg": null,
   "data": {
     "id": 1,
     "username": "testuser",
@@ -199,7 +180,7 @@ Authorization: Bearer {token}
     "status": 1,
     "createTime": "2025-11-18 10:00:00"
   },
-  "timestamp": 1700000000000
+  
 }
 ```
 
@@ -348,8 +329,8 @@ PUT /user/changePassword?oldPassword=Old123456&newPassword=New123456
 **响应示例**:
 ```json
 {
-  "code": 200,
-  "message": "操作成功",
+  "code": 1,
+  "msg": null,
   "data": {
     "total": 100,
     "pageNum": 1,
@@ -375,7 +356,7 @@ PUT /user/changePassword?oldPassword=Old123456&newPassword=New123456
       }
     ]
   },
-  "timestamp": 1700000000000
+  
 }
 ```
 
@@ -393,8 +374,8 @@ PUT /user/changePassword?oldPassword=Old123456&newPassword=New123456
 **响应示例**:
 ```json
 {
-  "code": 200,
-  "message": "操作成功",
+  "code": 1,
+  "msg": null,
   "data": {
     "id": 1,
     "userId": 2,
@@ -427,7 +408,7 @@ PUT /user/changePassword?oldPassword=Old123456&newPassword=New123456
     "status": 1,
     "createTime": "2025-11-18 10:00:00"
   },
-  "timestamp": 1700000000000
+  
 }
 ```
 

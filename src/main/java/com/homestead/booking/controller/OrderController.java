@@ -22,11 +22,11 @@ public class OrderController {
      * 创建订单
      */
     @PostMapping("/create")
-    public Result<String> createOrder(HttpServletRequest request,
-                                      @Valid @RequestBody OrderDTO dto) {
+    public Result<Void> createOrder(HttpServletRequest request,
+                                    @Valid @RequestBody OrderDTO dto) {
         Long userId = (Long) request.getAttribute("userId");
         // TODO: 实现订单创建逻辑
-        return Result.success("订单创建成功");
+        return Result.success();
     }
 
     /**
@@ -38,7 +38,7 @@ public class OrderController {
                                     @RequestParam String reason) {
         Long userId = (Long) request.getAttribute("userId");
         // TODO: 实现订单取消逻辑
-        return Result.success("订单取消成功");
+        return Result.success();
     }
 
 }

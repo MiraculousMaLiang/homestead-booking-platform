@@ -34,7 +34,7 @@ public class HomesteadController {
                                          @Valid @RequestBody HomesteadDTO dto) {
         Long userId = (Long) request.getAttribute("userId");
         homesteadService.publishHomestead(userId, dto);
-        return Result.success("发布成功");
+        return Result.success();
     }
 
     /**
@@ -46,7 +46,7 @@ public class HomesteadController {
                                         @Valid @RequestBody HomesteadDTO dto) {
         Long userId = (Long) request.getAttribute("userId");
         homesteadService.updateHomestead(userId, id, dto);
-        return Result.success("更新成功");
+        return Result.success();
     }
 
     /**
@@ -57,7 +57,7 @@ public class HomesteadController {
                                         @PathVariable Long id) {
         Long userId = (Long) request.getAttribute("userId");
         homesteadService.deleteHomestead(userId, id);
-        return Result.success("删除成功");
+        return Result.success();
     }
 
     /**
@@ -69,7 +69,7 @@ public class HomesteadController {
                                               @RequestParam Integer status) {
         Long userId = (Long) request.getAttribute("userId");
         homesteadService.updateHomesteadStatus(userId, id, status);
-        return Result.success("操作成功");
+        return Result.success();
     }
 
     /**

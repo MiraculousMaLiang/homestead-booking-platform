@@ -58,7 +58,7 @@ public class UserController {
             @Pattern(regexp = "^1[3-9]\\d{9}$", message = "手机号格式不正确")
             @RequestParam String phone) {
         userService.sendVerifyCode(phone);
-        return Result.success("验证码发送成功");
+        return Result.success();
     }
 
     /**
@@ -79,7 +79,7 @@ public class UserController {
                                        @RequestBody UserUpdateDTO dto) {
         Long userId = (Long) request.getAttribute("userId");
         userService.updateUserInfo(userId, dto);
-        return Result.success("更新成功");
+        return Result.success();
     }
 
     /**
@@ -91,7 +91,7 @@ public class UserController {
                                        @NotBlank(message = "新密码不能为空") @RequestParam String newPassword) {
         Long userId = (Long) request.getAttribute("userId");
         userService.changePassword(userId, oldPassword, newPassword);
-        return Result.success("密码修改成功");
+        return Result.success();
     }
 
 }
