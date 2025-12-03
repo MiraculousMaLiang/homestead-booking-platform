@@ -1,5 +1,6 @@
 package com.homestead.booking.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.BCrypt;
@@ -154,8 +155,9 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(ResultCode.USER_DISABLED);
         }
 
+        StpUtil.login(user.getId());
         // 生成Token
-        String token = jwtUtil.generateToken(user.getId(), user.getUsername());
+        String token = StpUtil.getTokenValue();
 
         // 转换为VO
         UserVO userVO = BeanUtil.copyProperties(user, UserVO.class);

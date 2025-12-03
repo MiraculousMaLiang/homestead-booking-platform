@@ -216,7 +216,7 @@ mvn clean package -DskipTests
 scp target/homestead-booking-platform-1.0.0.jar user@your-server:/opt/homestead/
 
 # 上传配置文件
-scp src/main/resources/application.yml user@your-server:/opt/homestead/
+scp src/main/resources/application.yml.bak user@your-server:/opt/homestead/
 ```
 
 ### 6. 创建systemd服务
