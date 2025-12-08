@@ -8,6 +8,9 @@ import com.homestead.booking.dto.UserUpdateDTO;
 import com.homestead.booking.service.UserService;
 import com.homestead.booking.vo.LoginVO;
 import com.homestead.booking.vo.UserVO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
  * @author homestead
  * @since 2025-11-18
  */
+@Tag(name = "用户管理", description = "用户注册、登录、信息管理等接口")
 @Slf4j
 @Validated
 @RestController
@@ -32,29 +36,24 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    /**
-     * 用户注册
-     */
+    @Operation(summary = "用户注册", description = "通过手机号和密码注册新用户")
     @PostMapping("/register")
     public Result<Void> register(@Valid @RequestBody UserRegisterDTO dto) {
         userService.register(dto);
         return Result.success();
     }
 
-    /**
-     * 用户登录
-     */
+    @Operation(summary = "用户登录", description = "支持密码登录和手机验证码登录")
     @PostMapping("/login")
     public Result<LoginVO> login(@Valid @RequestBody UserLoginDTO dto) {
         LoginVO loginVO = userService.login(dto);
         return Result.success(loginVO);
     }
 
-    /**
-     * 发送验证码
-     */
+    @Operation(summary = "发送验证码", description = "发送手机验证码，用于登录或注册")
     @PostMapping("/sendVerifyCode")
     public Result<Void> sendVerifyCode(
+            @Parameter(description = "手机号", required = true, example = "13800138000")
             @NotBlank(message = "手机号不能为空")
             @Pattern(regexp = "^1[3-9]\\d{9}$", message = "手机号格式不正确")
             @RequestParam String phone) {
@@ -62,18 +61,14 @@ public class UserController {
         return Result.success();
     }
 
-    /**
-     * 获取当前用户信息
-     */
+    @Operation(summary = "获取当前用户信息", description = "获取当前登录用户的详细信息")
     @GetMapping("/info")
     public Result<UserVO> getUserInfo() {
         UserVO userVO = userService.getUserInfo();
         return Result.success(userVO);
     }
 
-    /**
-     * 更新用户信息
-     */
+    @Operation(summary = "更新用户信息", description = "更新当前登录用户的个人信息")
     @PutMapping("/update")
     public Result<Void> updateUserInfo(HttpServletRequest request,
                                        @RequestBody UserUpdateDTO dto) {
@@ -82,13 +77,13 @@ public class UserController {
         return Result.success();
     }
 
-    /**
-     * 修改密码
-     */
+    @Operation(summary = "修改密码", description = "修改当前登录用户的登录密码")
     @PutMapping("/changePassword")
     public Result<Void> changePassword(
-                                       @NotBlank(message = "原密码不能为空") @RequestParam String oldPassword,
-                                       @NotBlank(message = "新密码不能为空") @RequestParam String newPassword) {
+            @Parameter(description = "原密码", required = true)
+            @NotBlank(message = "原密码不能为空") @RequestParam String oldPassword,
+            @Parameter(description = "新密码", required = true)
+            @NotBlank(message = "新密码不能为空") @RequestParam String newPassword) {
         Long userId = StpUtil.getLoginIdAsLong();
         userService.changePassword(userId, oldPassword, newPassword);
         return Result.success();
