@@ -32,7 +32,7 @@ public interface UserService {
     /**
      * 获取用户信息
      */
-    UserVO getUserInfo(Long userId);
+    UserVO getUserInfo();
 
     /**
      * 更新用户信息

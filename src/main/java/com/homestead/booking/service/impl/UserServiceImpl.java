@@ -13,7 +13,6 @@ import com.homestead.booking.entity.User;
 import com.homestead.booking.exception.BusinessException;
 import com.homestead.booking.mapper.UserMapper;
 import com.homestead.booking.service.UserService;
-import com.homestead.booking.utils.JwtUtil;
 import com.homestead.booking.utils.RedisUtil;
 import com.homestead.booking.vo.LoginVO;
 import com.homestead.booking.vo.UserVO;
@@ -35,9 +34,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
-
-    @Autowired
-    private JwtUtil jwtUtil;
 
     @Autowired
     private RedisUtil redisUtil;
@@ -198,7 +194,8 @@ public class UserServiceImpl implements UserService {
      * 获取用户信息
      */
     @Override
-    public UserVO getUserInfo(Long userId) {
+    public UserVO getUserInfo() {
+        long userId =StpUtil.getLoginIdAsLong();
         User user = userMapper.selectById(userId);
         if (user == null) {
             throw new BusinessException(ResultCode.USER_NOT_FOUND);

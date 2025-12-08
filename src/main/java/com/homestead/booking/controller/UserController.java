@@ -1,5 +1,6 @@
 package com.homestead.booking.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.homestead.booking.common.Result;
 import com.homestead.booking.dto.UserLoginDTO;
 import com.homestead.booking.dto.UserRegisterDTO;
@@ -65,9 +66,8 @@ public class UserController {
      * 获取当前用户信息
      */
     @GetMapping("/info")
-    public Result<UserVO> getUserInfo(HttpServletRequest request) {
-        Long userId = (Long) request.getAttribute("userId");
-        UserVO userVO = userService.getUserInfo(userId);
+    public Result<UserVO> getUserInfo() {
+        UserVO userVO = userService.getUserInfo();
         return Result.success(userVO);
     }
 
@@ -86,10 +86,10 @@ public class UserController {
      * 修改密码
      */
     @PutMapping("/changePassword")
-    public Result<Void> changePassword(HttpServletRequest request,
+    public Result<Void> changePassword(
                                        @NotBlank(message = "原密码不能为空") @RequestParam String oldPassword,
                                        @NotBlank(message = "新密码不能为空") @RequestParam String newPassword) {
-        Long userId = (Long) request.getAttribute("userId");
+        Long userId = StpUtil.getLoginIdAsLong();
         userService.changePassword(userId, oldPassword, newPassword);
         return Result.success();
     }
