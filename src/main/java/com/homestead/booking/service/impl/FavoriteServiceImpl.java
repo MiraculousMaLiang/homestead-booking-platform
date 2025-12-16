@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.homestead.booking.common.PageResult;
+import com.homestead.booking.common.Result;
 import com.homestead.booking.entity.Favorite;
 import com.homestead.booking.entity.Homestead;
 import com.homestead.booking.exception.BusinessException;
@@ -101,8 +102,9 @@ public class FavoriteServiceImpl implements FavoriteService {
         for (Favorite favorite : favoritePage.getRecords()) {
             list.add(buildFavoriteVO(favorite));
         }
+        PageResult<FavoriteVO> pageResult = PageResult.build(favoritePage.getTotal(), favoritePage.getPages(), favoritePage.getSize(),list);
 
-        return PageResult.success(favoritePage.getTotal(), list);
+        return pageResult;
     }
 
     /**
@@ -115,10 +117,10 @@ public class FavoriteServiceImpl implements FavoriteService {
         // 查询房源信息
         Homestead homestead = homesteadMapper.selectById(favorite.getHomesteadId());
         if (homestead != null) {
-            vo.setHomesteadName(homestead.getName());
+            vo.setHomesteadName(homestead.getTitle());
             vo.setHomesteadCover(homestead.getCoverImage());
             vo.setHomesteadAddress(homestead.getAddress());
-            vo.setHomesteadPrice(homestead.getPrice());
+            vo.setHomesteadPrice(homestead.getPricePerDay());
             vo.setHomesteadStatus(homestead.getStatus());
         }
 

@@ -101,7 +101,7 @@ public class OrderServiceImpl implements OrderService {
         long days = ChronoUnit.DAYS.between(dto.getCheckInDate(), dto.getCheckOutDate());
 
         // 计算价格
-        BigDecimal totalPrice = homestead.getPrice().multiply(BigDecimal.valueOf(days));
+        BigDecimal totalPrice = homestead.getPricePerDay().multiply(BigDecimal.valueOf(days));
         BigDecimal deposit = homestead.getDeposit() != null ? homestead.getDeposit() : BigDecimal.ZERO;
         BigDecimal discountAmount = BigDecimal.ZERO; // TODO: 优惠券逻辑
         BigDecimal actualPrice = totalPrice.add(deposit).subtract(discountAmount);
@@ -273,7 +273,7 @@ public class OrderServiceImpl implements OrderService {
             list.add(buildOrderVO(order));
         }
 
-        return PageResult.success(orderPage.getTotal(), list);
+        return PageResult.build(orderPage.getTotal(),pageNum,pageSize,list);
     }
 
     @Override
@@ -293,7 +293,7 @@ public class OrderServiceImpl implements OrderService {
             list.add(buildOrderVO(order));
         }
 
-        return PageResult.success(orderPage.getTotal(), list);
+        return PageResult.build(orderPage.getTotal(),pageNum,pageSize, list);
     }
 
     /**
@@ -307,7 +307,7 @@ public class OrderServiceImpl implements OrderService {
         // 查询房源信息
         Homestead homestead = homesteadMapper.selectById(order.getHomesteadId());
         if (homestead != null) {
-            vo.setHomesteadName(homestead.getName());
+            vo.setHomesteadName(homestead.getTitle());
             vo.setHomesteadCover(homestead.getCoverImage());
         }
 

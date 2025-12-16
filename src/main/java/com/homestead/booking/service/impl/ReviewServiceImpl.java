@@ -158,7 +158,7 @@ public class ReviewServiceImpl implements ReviewService {
             list.add(buildReviewVO(review));
         }
 
-        return PageResult.success(reviewPage.getTotal(), list);
+        return PageResult.build(reviewPage.getTotal(),pageNum, pageSize, list);
     }
 
     @Override
@@ -175,7 +175,7 @@ public class ReviewServiceImpl implements ReviewService {
             list.add(buildReviewVO(review));
         }
 
-        return PageResult.success(reviewPage.getTotal(), list);
+        return PageResult.build(reviewPage.getTotal(),pageNum, pageSize, list);
     }
 
     @Override
@@ -219,7 +219,7 @@ public class ReviewServiceImpl implements ReviewService {
         // 查询房源信息
         Homestead homestead = homesteadMapper.selectById(review.getHomesteadId());
         if (homestead != null) {
-            vo.setHomesteadName(homestead.getName());
+            vo.setHomesteadName(homestead.getTitle());
         }
 
         return vo;
