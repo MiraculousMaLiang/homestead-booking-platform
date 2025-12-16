@@ -41,7 +41,7 @@ public class Knife4jConfig {
     @Bean
     public GroupedOpenApi userApi() {
         return GroupedOpenApi.builder()
-                .group("1-用户管理")
+                .group("用户管理")
                 .pathsToMatch("/user/**")
                 .build();
     }
@@ -52,7 +52,7 @@ public class Knife4jConfig {
     @Bean
     public GroupedOpenApi homesteadApi() {
         return GroupedOpenApi.builder()
-                .group("2-房源管理")
+                .group("房源管理")
                 .pathsToMatch("/homestead/**")
                 .build();
     }
@@ -63,7 +63,7 @@ public class Knife4jConfig {
     @Bean
     public GroupedOpenApi orderApi() {
         return GroupedOpenApi.builder()
-                .group("3-订单管理")
+                .group("订单管理")
                 .pathsToMatch("/order/**")
                 .build();
     }
@@ -74,7 +74,7 @@ public class Knife4jConfig {
     @Bean
     public GroupedOpenApi reviewApi() {
         return GroupedOpenApi.builder()
-                .group("4-评价管理")
+                .group("评价管理")
                 .pathsToMatch("/review/**")
                 .build();
     }
@@ -85,7 +85,7 @@ public class Knife4jConfig {
     @Bean
     public GroupedOpenApi favoriteApi() {
         return GroupedOpenApi.builder()
-                .group("5-收藏管理")
+                .group("收藏管理")
                 .pathsToMatch("/favorite/**")
                 .build();
     }
