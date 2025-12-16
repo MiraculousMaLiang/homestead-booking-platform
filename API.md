@@ -3,7 +3,7 @@
 ## 基础信息
 
 - **Base URL**: `http://localhost:8080/api`
-- **认证方式**: JWT Token (Bearer Token)
+- **认证方式**: Sa-Token 
 - **请求格式**: `application/json`
 - **响应格式**: `application/json`
 

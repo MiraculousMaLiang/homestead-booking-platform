@@ -35,59 +35,59 @@ public class Knife4jConfig {
                                 .url("https://opensource.org/licenses/MIT")));
     }
 
-    /**
-     * 用户管理模块API
-     */
-    @Bean
-    public GroupedOpenApi userApi() {
-        return GroupedOpenApi.builder()
-                .group("用户管理")
-                .pathsToMatch("/user/**")
-                .build();
-    }
-
-    /**
-     * 房源管理模块API
-     */
-    @Bean
-    public GroupedOpenApi homesteadApi() {
-        return GroupedOpenApi.builder()
-                .group("房源管理")
-                .pathsToMatch("/homestead/**")
-                .build();
-    }
-
-    /**
-     * 订单管理模块API
-     */
-    @Bean
-    public GroupedOpenApi orderApi() {
-        return GroupedOpenApi.builder()
-                .group("订单管理")
-                .pathsToMatch("/order/**")
-                .build();
-    }
-
-    /**
-     * 评价管理模块API
-     */
-    @Bean
-    public GroupedOpenApi reviewApi() {
-        return GroupedOpenApi.builder()
-                .group("评价管理")
-                .pathsToMatch("/review/**")
-                .build();
-    }
-
-    /**
-     * 收藏管理模块API
-     */
-    @Bean
-    public GroupedOpenApi favoriteApi() {
-        return GroupedOpenApi.builder()
-                .group("收藏管理")
-                .pathsToMatch("/favorite/**")
-                .build();
-    }
+//    /**
+//     * 用户管理模块API
+//     */
+//    @Bean
+//    public GroupedOpenApi userApi() {
+//        return GroupedOpenApi.builder()
+//                .group("用户管理")
+//                .pathsToMatch("/user/**")
+//                .build();
+//    }
+//
+//    /**
+//     * 房源管理模块API
+//     */
+//    @Bean
+//    public GroupedOpenApi homesteadApi() {
+//        return GroupedOpenApi.builder()
+//                .group("房源管理")
+//                .pathsToMatch("/homestead/**")
+//                .build();
+//    }
+//
+//    /**
+//     * 订单管理模块API
+//     */
+//    @Bean
+//    public GroupedOpenApi orderApi() {
+//        return GroupedOpenApi.builder()
+//                .group("订单管理")
+//                .pathsToMatch("/order/**")
+//                .build();
+//    }
+//
+//    /**
+//     * 评价管理模块API
+//     */
+//    @Bean
+//    public GroupedOpenApi reviewApi() {
+//        return GroupedOpenApi.builder()
+//                .group("评价管理")
+//                .pathsToMatch("/review/**")
+//                .build();
+//    }
+//
+//    /**
+//     * 收藏管理模块API
+//     */
+//    @Bean
+//    public GroupedOpenApi favoriteApi() {
+//        return GroupedOpenApi.builder()
+//                .group("收藏管理")
+//                .pathsToMatch("/favorite/**")
+//                .build();
+//    }
 
 }
