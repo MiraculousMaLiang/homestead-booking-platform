@@ -1,5 +1,6 @@
 package com.homestead.booking.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.homestead.booking.common.PageResult;
 import com.homestead.booking.common.Result;
 import com.homestead.booking.dto.HomesteadDTO;
@@ -32,42 +33,41 @@ public class HomesteadController {
 
     @Operation(summary = "发布房源", description = "房东发布新的房源信息")
     @PostMapping("/publish")
-    public Result<Void> publishHomestead(HttpServletRequest request,
-                                         @Valid @RequestBody HomesteadDTO dto) {
-        Long userId = (Long) request.getAttribute("userId");
+    public Result<Void> publishHomestead(@Valid @RequestBody HomesteadDTO dto) {
+        Long userId = StpUtil.getLoginIdAsLong();
         homesteadService.publishHomestead(userId, dto);
         return Result.success();
     }
 
     @Operation(summary = "更新房源", description = "房东更新已发布的房源信息")
     @PutMapping("/update/{id}")
-    public Result<Void> updateHomestead(HttpServletRequest request,
+    public Result<Void> updateHomestead(
                                         @Parameter(description = "房源ID", required = true)
                                         @PathVariable Long id,
                                         @Valid @RequestBody HomesteadDTO dto) {
-        Long userId = (Long) request.getAttribute("userId");
+        Long userId = StpUtil.getLoginIdAsLong();
         homesteadService.updateHomestead(userId, id, dto);
         return Result.success();
     }
 
     @Operation(summary = "删除房源", description = "房东删除已发布的房源(逻辑删除)")
     @DeleteMapping("/delete/{id}")
-    public Result<Void> deleteHomestead(HttpServletRequest request,
+    public Result<Void> deleteHomestead(
                                         @Parameter(description = "房源ID", required = true)
                                         @PathVariable Long id) {
-        Long userId = (Long) request.getAttribute("userId");
+        Long userId = StpUtil.getLoginIdAsLong();
         homesteadService.deleteHomestead(userId, id);
         return Result.success();
     }
 
     @Operation(summary = "上架/下架房源", description = "房东修改房源上架状态，0-下架 1-上架")
     @PutMapping("/status/{id}")
-    public Result<Void> updateHomesteadStatus(HttpServletRequest request,
+    public Result<Void> updateHomesteadStatus(
                                               @Parameter(description = "房源ID", required = true)
                                               @PathVariable Long id,
                                               @Parameter(description = "状态：0-下架 1-上架", required = true)
                                               @RequestParam Integer status) {
-        Long userId = (Long) request.getAttribute("userId");
+        Long userId = StpUtil.getLoginIdAsLong();
         homesteadService.updateHomesteadStatus(userId, id, status);
         return Result.success();
     }
@@ -90,12 +90,12 @@ public class HomesteadController {
 
     @Operation(summary = "获取我发布的房源列表", description = "房东查看自己发布的所有房源")
     @GetMapping("/my")
-    public Result<PageResult<HomesteadVO>> getMyHomesteadList(HttpServletRequest request,
+    public Result<PageResult<HomesteadVO>> getMyHomesteadList(
                                                                @Parameter(description = "页码", example = "1")
                                                                @RequestParam(defaultValue = "1") Long pageNum,
                                                                @Parameter(description = "每页数量", example = "10")
                                                                @RequestParam(defaultValue = "10") Long pageSize) {
-        Long userId = (Long) request.getAttribute("userId");
+        Long userId = StpUtil.getLoginIdAsLong();
         PageResult<HomesteadVO> pageResult = homesteadService.getMyHomesteadList(userId, pageNum, pageSize);
         return Result.success(pageResult);
     }

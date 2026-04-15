@@ -136,4 +136,9 @@ public class HomesteadDTO implements Serializable {
      */
     private LocalTime checkOutTime;
 
+    /**
+     * 房源分类ID
+     */
+    @NotNull(message = "房源分类ID不能为空")
+    private Integer categoryId;
 }

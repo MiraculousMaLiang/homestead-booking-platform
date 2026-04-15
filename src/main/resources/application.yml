@@ -5,14 +5,14 @@ spring:
   # 数据源配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://111.228.33.100:3306/homestead_booking?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://127.0.0.1:3306/homestead_booking?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
-    password: xf123456
+    password: root
 
   # Redis配置
   data:
     redis:
-      host: 111.228.33.100
+      host: 127.0.0.1
       port: 6379
       password: 123456
       database: 0
@@ -59,7 +59,7 @@ mybatis-plus:
 
 # 服务器配置
 server:
-  port: 8080
+  port: 8083
   servlet:
     context-path: /api
 
@@ -97,18 +97,18 @@ homestead:
 
   # 阿里云OSS配置
   oss:
-    endpoint: oss-cn-hangzhou.aliyuncs.com
-    access-key-id: your-access-key-id
-    access-key-secret: your-access-key-secret
-    bucket-name: homestead-booking
-    base-url: https://homestead-booking.oss-cn-hangzhou.aliyuncs.com
+    endpoint: https://oss-cn-beijing.aliyuncs.com
+    access-key-id: ENC(/kLZz+XNijbntw9ClzD9URWln1yLaMpV0rAbxqEORFxAlOP3Xlq2h7l6rJeoksYw4PI77WMdgJjgnmq96kBkXw==)
+    access-key-secret: ENC(4tQMusNonvdzIXjgV87uzB+DyO/Rnyro9hcFehZZQt/pqtWYNQBjcip2CQLVNMuhfSorJhV1dy5FMQ1OvEjVcg==)
+    bucket-name: yxf-1662
+    region: cn-beijing # 你的Bucket所在地域（与Endpoint一致）
 
   # 阿里云短信配置
-  sms:
-    access-key-id: your-access-key-id
-    access-key-secret: your-access-key-secret
-    sign-name: 民宿预订平台
-    template-code: SMS_123456789
+#  sms:
+#    access-key-id: your-access-key-id
+#    access-key-secret: your-access-key-secret
+#    sign-name: 民宿预订平台
+#    template-code: SMS_123456789
 
   # 分页配置
   page:
@@ -119,13 +119,13 @@ sa-token:
   # token名称 (同时也是cookie名称)
   token-name: Authorization
   # token有效期，单位秒，-1代表永不过期
-  timeout: 7200
+  timeout: 604800000
   # token临时有效期 (指定时间内无操作就视为token过期)，单位秒
-  activity-timeout: 1800
+  active-timeout: 604800000
   # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
   is-concurrent: true
   # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
-  is-share: false
+  is-share: true
   # token风格
   token-style: uuid
   # 是否输出操作日志

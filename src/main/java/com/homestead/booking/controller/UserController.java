@@ -1,11 +1,14 @@
 package com.homestead.booking.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.homestead.booking.common.PageResult;
 import com.homestead.booking.common.Result;
 import com.homestead.booking.dto.UserLoginDTO;
 import com.homestead.booking.dto.UserRegisterDTO;
 import com.homestead.booking.dto.UserUpdateDTO;
-import com.homestead.booking.service.UserService;
+import com.homestead.booking.service.*;
+import com.homestead.booking.vo.HomesteadVO;
+import com.homestead.booking.vo.InfomationVO;
 import com.homestead.booking.vo.LoginVO;
 import com.homestead.booking.vo.UserVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,9 +19,12 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.URL;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 用户Controller
@@ -35,6 +41,14 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private FileUpdateService fileService;
+    @Autowired
+    private HomesteadService homesteadService;
+    @Autowired
+    private ReviewService reviewService;
+    @Autowired
+    private FavoriteService favoriteService;
 
     @Operation(summary = "用户注册", description = "通过手机号和密码注册新用户")
     @PostMapping("/register")
@@ -72,7 +86,8 @@ public class UserController {
     @PutMapping("/update")
     public Result<Void> updateUserInfo(HttpServletRequest request,
                                        @RequestBody UserUpdateDTO dto) {
-        Long userId = (Long) request.getAttribute("userId");
+//        Long userId = (Long) request.getAttribute("userId");
+        Long userId = StpUtil.getLoginIdAsLong();
         userService.updateUserInfo(userId, dto);
         return Result.success();
     }
@@ -87,6 +102,32 @@ public class UserController {
         Long userId = StpUtil.getLoginIdAsLong();
         userService.changePassword(userId, oldPassword, newPassword);
         return Result.success();
+    }
+
+    @Operation(summary = "修改头像")
+    @PatchMapping("/updateAvatar")
+    public Result updateAvatar(MultipartFile file) throws Exception {
+        @URL String avatarUrl=fileService.upload(file);
+        userService.updateAvatar(avatarUrl);
+        return Result.success("修改成功");
+    }
+
+    @Operation(summary = "获取用户个人中心信息", description = "获取当前登录用户个人中心的详细信息")
+    @GetMapping("/infomation")
+    public Result<InfomationVO> getUserInfomation() {
+        InfomationVO infomationVO = new InfomationVO();
+        UserVO userVO = userService.getUserInfo();
+        BeanUtils.copyProperties(userVO, infomationVO);
+
+        // 获取用户发布的房源数量
+        infomationVO.setHomesteadCount(homesteadService.getMyHomesteadList(userVO.getId(), 1L, 100L).getTotal());
+
+        // 获取用户收到的评论数量
+        infomationVO.setReviewCount(reviewService.getUserReviewList(userVO.getId(), 1L, 100L).getTotal());
+
+        // 获取用户收藏的房源数量
+        infomationVO.setFavoriteCount(favoriteService.getMyFavoriteList(userVO.getId(), 1L, 100L).getTotal());
+        return Result.success(infomationVO);
     }
 
 }

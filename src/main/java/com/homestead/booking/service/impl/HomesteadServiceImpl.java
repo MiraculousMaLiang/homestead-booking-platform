@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +44,8 @@ public class HomesteadServiceImpl implements HomesteadService {
         homestead.setViewCount(0);
         homestead.setFavoriteCount(0);
         homestead.setOrderCount(0);
+        homestead.setCreateTime(LocalDateTime.now());
+        homestead.setUpdateTime(LocalDateTime.now());
 
         homesteadMapper.insert(homestead);
 
@@ -66,6 +69,7 @@ public class HomesteadServiceImpl implements HomesteadService {
 
         // 更新信息
         BeanUtil.copyProperties(dto, homestead, "id", "userId", "viewCount", "favoriteCount", "orderCount", "ratingScore");
+        homestead.setUpdateTime(LocalDateTime.now());
 
         homesteadMapper.updateById(homestead);
 
@@ -147,6 +151,10 @@ public class HomesteadServiceImpl implements HomesteadService {
                     .or()
                     .like(Homestead::getDescription, dto.getKeyword()));
         }
+        // 分类筛选
+        if (dto.getCategoryId() != null){
+            wrapper.eq(Homestead::getCategoryId, dto.getCategoryId());
+        }
 
         // 城市筛选
         if (dto.getCity() != null && !dto.getCity().isEmpty()) {
@@ -190,6 +198,7 @@ public class HomesteadServiceImpl implements HomesteadService {
         // 分页查询
         Page<Homestead> page = new Page<>(dto.getPageNum(), dto.getPageSize());
         Page<Homestead> resultPage = homesteadMapper.selectPage(page, wrapper);
+        System.out.println(resultPage.getPages());
 
         // 转换为VO
         List<HomesteadVO> records = resultPage.getRecords().stream()

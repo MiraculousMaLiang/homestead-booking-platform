@@ -3,6 +3,7 @@ package com.homestead.booking.controller;
 import cn.dev33.satoken.stp.StpUtil;
 import com.homestead.booking.common.PageResult;
 import com.homestead.booking.common.Result;
+import com.homestead.booking.dto.CencelDTO;
 import com.homestead.booking.dto.OrderDTO;
 import com.homestead.booking.service.OrderService;
 import com.homestead.booking.vo.OrderVO;
@@ -41,15 +42,10 @@ public class OrderController {
     }
 
     @Operation(summary = "取消订单", description = "用户取消已创建的订单")
-    @PutMapping("/cancel/{orderId}")
-    public Result<Void> cancelOrder(
-            @Parameter(description = "订单ID", required = true)
-            @PathVariable Long orderId,
-            @Parameter(description = "取消原因", required = true)
-            @NotBlank(message = "取消原因不能为空")
-            @RequestParam String reason) {
+    @PutMapping("/cancel")
+    public Result<Void> cancelOrder(@RequestBody @Valid CencelDTO dto) {
         Long userId = StpUtil.getLoginIdAsLong();
-        orderService.cancelOrder(userId, orderId, reason);
+        orderService.cancelOrder(userId, dto.getOrderId(), dto.getReason());
         return Result.success();
     }
 

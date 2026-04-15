@@ -184,4 +184,8 @@ public class Homestead implements Serializable {
     @TableLogic
     private Integer deleted;
 
+    /**
+     * 分类ID
+     */
+    private Integer categoryId;
 }

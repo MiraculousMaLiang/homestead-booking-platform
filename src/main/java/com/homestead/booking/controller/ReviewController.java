@@ -3,6 +3,7 @@ package com.homestead.booking.controller;
 import cn.dev33.satoken.stp.StpUtil;
 import com.homestead.booking.common.PageResult;
 import com.homestead.booking.common.Result;
+import com.homestead.booking.dto.ReplyDTO;
 import com.homestead.booking.dto.ReviewDTO;
 import com.homestead.booking.service.ReviewService;
 import com.homestead.booking.vo.ReviewVO;
@@ -44,15 +45,10 @@ public class ReviewController {
     }
 
     @Operation(summary = "房东回复评价", description = "房东对评价进行回复")
-    @PostMapping("/reply/{reviewId}")
-    public Result<Void> replyReview(
-            @Parameter(description = "评价ID", required = true)
-            @PathVariable Long reviewId,
-            @Parameter(description = "回复内容", required = true)
-            @NotBlank(message = "回复内容不能为空")
-            @RequestParam String replyContent) {
+    @PostMapping("/reply")
+    public Result<Void> replyReview(@RequestBody @Valid ReplyDTO dto) {
         Long landlordId = StpUtil.getLoginIdAsLong();
-        reviewService.replyReview(landlordId, reviewId, replyContent);
+        reviewService.replyReview(landlordId, dto.getReviewId(), dto.getReplyContent());
         return Result.success();
     }
 

@@ -5,10 +5,11 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.homestead.booking.common.PageResult;
 import com.homestead.booking.common.ResultCode;
-import com.homestead.booking.dto.UserLoginDTO;
-import com.homestead.booking.dto.UserRegisterDTO;
-import com.homestead.booking.dto.UserUpdateDTO;
+import com.homestead.booking.dto.*;
 import com.homestead.booking.entity.User;
 import com.homestead.booking.exception.BusinessException;
 import com.homestead.booking.mapper.UserMapper;
@@ -19,7 +20,9 @@ import com.homestead.booking.vo.UserVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -44,14 +47,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void register(UserRegisterDTO dto) {
         // 验证验证码
-        String cacheKey = "verify_code:" + dto.getPhone();
-        Object cacheCode = redisUtil.get(cacheKey);
-        if (cacheCode == null) {
-            throw new BusinessException(ResultCode.VERIFY_CODE_EXPIRED);
-        }
-        if (!dto.getVerifyCode().equals(cacheCode.toString())) {
-            throw new BusinessException(ResultCode.VERIFY_CODE_ERROR);
-        }
+//        String cacheKey = "verify_code:" + dto.getPhone();
+//        Object cacheCode = redisUtil.get(cacheKey);
+//        if (cacheCode == null) {
+//            throw new BusinessException(ResultCode.VERIFY_CODE_EXPIRED);
+//        }
+//        if (!dto.getVerifyCode().equals(cacheCode.toString())) {
+//            throw new BusinessException(ResultCode.VERIFY_CODE_ERROR);
+//        }
 
         // 检查用户名是否已存在
         LambdaQueryWrapper<User> usernameWrapper = new LambdaQueryWrapper<>();
@@ -80,7 +83,7 @@ public class UserServiceImpl implements UserService {
         userMapper.insert(user);
 
         // 删除验证码缓存
-        redisUtil.delete(cacheKey);
+//        redisUtil.delete(cacheKey);
 
         log.info("用户注册成功: {}", dto.getUsername());
     }
@@ -256,6 +259,72 @@ public class UserServiceImpl implements UserService {
         userMapper.updateById(user);
 
         log.info("用户修改密码成功: {}", userId);
+    }
+
+    @Override
+    public void updateAvatar(String avatarUrl) {
+        // 1. 获取当前登录用户ID
+        long userId =StpUtil.getLoginIdAsLong();
+        // 2. 创建要更新的User对象，只设置需要修改的avatar字段
+        User updateUser = new User();
+        updateUser.setAvatar(avatarUrl);
+
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getId, userId);
+
+        userMapper.update(updateUser,wrapper);
+    }
+
+    @Override
+    public PageResult<User> getUserList(AdminUserDTO adminUserDTO) {
+        // 1. 核心修复：分页参数合法性校验（避免pageNum/pageSize为0/负数导致报错）
+        long pageNum = 1; // 默认第一页
+        if (adminUserDTO.getPageNum() != null && adminUserDTO.getPageNum() > 0) {
+            pageNum = adminUserDTO.getPageNum();
+        }
+
+        long pageSize = 10; // 默认每页10条
+        if (adminUserDTO.getPageSize() != null && adminUserDTO.getPageSize() > 0) {
+            pageSize = adminUserDTO.getPageSize();
+        }
+        // 额外优化：限制单页最大条数（比如最多50条），避免一次性查太多数据导致性能问题
+        pageSize = Math.min(pageSize, 50);
+
+        // 2. 构建查询条件（优化判空逻辑，更简洁）
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        // 使用StringUtils.hasText：同时判断null、空字符串、全空格，更严谨
+        if (StringUtils.hasText(adminUserDTO.getUsername())) {
+            wrapper.like(User::getUsername, adminUserDTO.getUsername());
+        }
+        if (adminUserDTO.getGender() != null) {
+            wrapper.eq(User::getGender, adminUserDTO.getGender());
+        }
+        if (adminUserDTO.getStatus() != null) {
+            wrapper.eq(User::getStatus, adminUserDTO.getStatus());
+        }
+        wrapper.orderByDesc(User::getCreateTime);
+
+        // 3. 分页查询
+        Page<User> page = new Page<>(pageNum, pageSize);
+        IPage<User> resultPage = userMapper.selectPage(page, wrapper);
+
+
+        // 4. 直接使用原查询结果（无VO转换，去掉无意义的stream复制）
+        List<User> records = resultPage.getRecords();
+
+        // 5. 封装分页结果返回
+        return PageResult.build(resultPage.getTotal(), resultPage.getCurrent(),
+                resultPage.getSize(), records);
+    }
+
+    @Override
+    public boolean removeUser(User user) {
+        if (user.getId() == null) {
+            return false;
+        }
+        boolean result =userMapper.removeUser(user.getId(),user.getStatus());
+
+        return result;
     }
 
 }

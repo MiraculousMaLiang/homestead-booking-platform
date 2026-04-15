@@ -70,5 +70,9 @@ public class HomesteadQueryDTO implements Serializable {
      * 每页大小
      */
     private Long pageSize = 10L;
+    /**
+     * 分类ID
+     */
+    private Integer categoryId;
 
 }

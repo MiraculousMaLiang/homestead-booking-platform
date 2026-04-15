@@ -1,8 +1,8 @@
 package com.homestead.booking.service;
 
-import com.homestead.booking.dto.UserLoginDTO;
-import com.homestead.booking.dto.UserRegisterDTO;
-import com.homestead.booking.dto.UserUpdateDTO;
+import com.homestead.booking.common.PageResult;
+import com.homestead.booking.dto.*;
+import com.homestead.booking.entity.User;
 import com.homestead.booking.vo.LoginVO;
 import com.homestead.booking.vo.UserVO;
 
@@ -44,4 +44,9 @@ public interface UserService {
      */
     void changePassword(Long userId, String oldPassword, String newPassword);
 
+    void updateAvatar(String avatarUrl);
+
+    PageResult<User> getUserList(AdminUserDTO adminUserDTO);
+
+    boolean removeUser(User user);
 }
